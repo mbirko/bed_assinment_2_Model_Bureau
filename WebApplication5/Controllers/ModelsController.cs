@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using model_handin.Data;
 using model_handin.DTO;
+using model_handin.Interfaces;
 using model_handin.Models;
 using model_handin.Services;
 
@@ -17,17 +18,20 @@ namespace model_handin.Controllers
     public class ModelsController : ControllerBase
     {
         private readonly ModelDb _context;
+        private IModelService _modelService; 
 
-        public ModelsController(ModelDb context)
+        public ModelsController(ModelDb context , IModelService modelService)
         {
             _context = context;
+            _modelService = modelService;
         }
 
         // GET: api/Models
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Model>>> GetModels()
+        public async Task<ActionResult<IEnumerable<ModelDTO>>> GetModels()
         {
-            return await _context.Models.ToListAsync();
+            var models =  await _context.Models.ToListAsync();
+            return _modelService.ConvertToDtO(models);
         }
 
         // GET: api/Models/5
@@ -47,13 +51,14 @@ namespace model_handin.Controllers
         // PUT: api/Models/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModel(long id, Model model)
+        public async Task<IActionResult> PutModel(long id, ModelDTO modelDto)
         {
-            if (id != model.ModelId)
+            if (id != modelDto.ModelId)
             {
                 return BadRequest();
             }
 
+            var model = _modelService.ConvertToModel(modelDto);
             _context.Entry(model).State = EntityState.Modified;
 
             try
@@ -80,8 +85,9 @@ namespace model_handin.Controllers
         [HttpPost]
         public async Task<ActionResult<Model>> PostModel(ModelDTO model)
         {
-            var service = new ModelService();
-            _context.Models.Add(service.ConvertModelDtoToModel(model));
+        
+            var modelToAdd = _modelService.ConvertToModel(model);
+            _context.Models.Add(modelToAdd);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetModel", new { id = model.ModelId }, model);

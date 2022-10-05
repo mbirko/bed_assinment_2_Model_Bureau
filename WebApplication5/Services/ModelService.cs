@@ -1,28 +1,26 @@
 ﻿using model_handin.Models;
 using model_handin.DTO;
+using model_handin.Interfaces;
+using Mapster;
 
 namespace model_handin.Services
 {
-    public class ModelService
+    public class ModelService  : IModelService 
     {
-        public Model ConvertModelDtoToModel(ModelDTO modelDto)
+      
+        public List<ModelDTO> ConvertToDtO(List<Model> models)
         {
-            return new Model
-            {
-                FirstName = modelDto.FirstName,
-                LastName = modelDto.LastName,
-                AddresLine1 = modelDto.AddresLine1,
-                AddresLine2 = modelDto.AddresLine2,
-                HairColor = modelDto.HairColor,
-                Email = modelDto.Email,
-                PhoneNo = modelDto.PhoneNo,
-                Zip = modelDto.Zip,
-                Height = modelDto.Height,
-                City = modelDto.City,
-                BirthDay = modelDto.BirthDay,
-                ShoeSize = modelDto.ShoeSize,
-                Comments = modelDto.Comments,
-            };
+            var modelsDto = models.Adapt<List<ModelDTO>>();
+            return modelsDto;
         }
+
+        public Model ConvertToModel(ModelDTO model)
+        {
+            var _model = model.Adapt<Model>();
+            return _model;
+        }
+
+ 
+        
     }
 }

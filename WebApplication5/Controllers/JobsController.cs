@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using model_handin.Data;
+using model_handin.DTO;
+using model_handin.Interfaces;
 using model_handin.Models;
 
 namespace model_handin.Controllers
@@ -15,10 +17,12 @@ namespace model_handin.Controllers
     public class JobsController : ControllerBase
     {
         private readonly ModelDb _context;
+        private IJobService _jobService;
 
-        public JobsController(ModelDb context)
+        public JobsController(ModelDb context, IJobService jobService)
         {
             _context = context;
+            _jobService = jobService;
         }
 
         // GET: api/Jobs
@@ -45,13 +49,14 @@ namespace model_handin.Controllers
         // PUT: api/Jobs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutJob(long id, Job job)
+        public async Task<IActionResult> PutJob(long id, JobDTO jobDTO)
         {
-            if (id != job.JobId)
+            if (id != jobDTO.JobId)
             {
                 return BadRequest();
             }
 
+            var job = _jobService.ConvertToJob(jobDTO);
             _context.Entry(job).State = EntityState.Modified;
 
             try
