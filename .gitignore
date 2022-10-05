@@ -6,7 +6,7 @@
 # 
 *.DS_Store
 *.svp
-
+*.VS_code
 
 # User-specific files
 *.rsuser
