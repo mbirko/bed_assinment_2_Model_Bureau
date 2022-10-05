@@ -6,6 +6,7 @@ namespace model_handin.Models
     {
         public long ExpenseId { get; set; }
         public long ModelId { get; set; }
+        public long JobId { get; set; }
         [Column(TypeName = "date")]
         public DateTime Date { get; set; }
         public string? Text { get; set; }

@@ -12,5 +12,6 @@ namespace model_handin.Data
 
         public DbSet<Expense> Expenses => Set<Expense>();
 
+        public DbSet<Job> Jobs => Set<Job>();
     }
 }
