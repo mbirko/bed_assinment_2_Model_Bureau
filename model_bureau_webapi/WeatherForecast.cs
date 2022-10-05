@@ -1,4 +1,4 @@
-namespace model_bureau;
+namespace model_bureau_webapi;
 
 public class WeatherForecast
 {
