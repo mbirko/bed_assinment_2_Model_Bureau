@@ -7,6 +7,7 @@
 *.DS_Store
 *.svp
 *.VS_code
+*.idea
 
 # User-specific files
 *.rsuser
