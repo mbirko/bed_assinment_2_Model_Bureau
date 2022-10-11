@@ -5,7 +5,7 @@ namespace model_handin.DTO
 {
     public class ModelDTO
     {
-        public long ModelId { get; set; }
+        public long ModelId { get; private set; }
         [MaxLength(64)]
         public string? FirstName { get; set; }
         [MaxLength(32)]

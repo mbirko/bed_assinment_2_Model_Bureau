@@ -81,8 +81,9 @@ namespace model_handin.Controllers
         // POST: api/Jobs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Job>> PostJob(Job job)
+        public async Task<ActionResult<Job>> PostJob(JobDTO jobDto)
         {
+            var job = _jobService.ConvertToJob(jobDto);
             _context.Jobs.Add(job);
             await _context.SaveChangesAsync();
 

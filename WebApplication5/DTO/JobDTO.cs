@@ -5,7 +5,7 @@ namespace model_handin.DTO
 {
     public class JobDTO
     {
-        public long JobId { get; set; }
+        public long JobId { get; private set; }
         public DateTimeOffset StartDate { get; set; }
         public int Days { get; set; }
         [MaxLength(128)]

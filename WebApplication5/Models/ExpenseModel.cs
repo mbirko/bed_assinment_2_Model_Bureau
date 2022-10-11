@@ -4,7 +4,7 @@ namespace model_handin.Models
 {
     public class Expense
     {
-        public long ExpenseId { get; set; }
+        public long ExpenseId { get; private set; }
         public long ModelId { get; set; }
         public long JobId { get; set; }
         [Column(TypeName = "date")]
