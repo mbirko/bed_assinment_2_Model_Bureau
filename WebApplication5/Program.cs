@@ -9,9 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSignalR();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddDbContext<ModelDb>(options =>
-//    options.UseSqlServer(connectionString));
-builder.Services.AddDbContext<ModelDb>(options => options.UseInMemoryDatabase("modeldb"));
+builder.Services.AddDbContext<ModelDb>(options =>
+    options.UseSqlServer(connectionString));
+// builder.Services.AddDbContext<ModelDb>(options => options.UseInMemoryDatabase("modeldb"));
 
 builder.Services.AddTransient<IModelService, ModelService>();
 builder.Services.AddTransient<IJobService, JobService>();
