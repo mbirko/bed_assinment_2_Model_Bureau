@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,8 @@ namespace model_handin.Controllers
     public class ModelsController : ControllerBase
     {
         private readonly ModelDb _context;
-        private IModelService _modelService; 
-
+        private IModelService _modelService;
+        private IJobService _jobService;
         public ModelsController(ModelDb context , IModelService modelService)
         {
             _context = context;
@@ -36,16 +37,39 @@ namespace model_handin.Controllers
 
         // GET: api/Models/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Model>> GetModel(long id)
+        public async Task<ActionResult<ModelIdDTO>> GetModel(long id)
         {
             var model = await _context.Models.FindAsync(id);
+
+            //
 
             if (model == null)
             {
                 return NotFound();
             }
+            var expenses = _context.Expenses.Where(x => x.ModelId == id).ToList();
 
-            return model;
+            //if (expenses == null)
+            //{
+            //    return NotFound();
+            //}
+            model.Expenses = expenses;
+            
+
+            var jobs = _context.Jobs.Where(x => x.Models.Contains(model)).ToList();
+                       
+            model.Jobs = jobs;
+            //foreach (Job job in jobs)
+            //{
+            //    //JobDTO jobDTO = _jobService.ConvertToDTOJob(job);
+            //    //var jobDTO = job.Adapt<JobDTO>();
+            //    //model.Jobs.Add
+
+            //    job.
+            //}
+            var _model = model.Adapt<ModelIdDTO>();
+
+            return _model;
         }
 
         // PUT: api/Models/5
@@ -92,6 +116,7 @@ namespace model_handin.Controllers
 
             return CreatedAtAction("GetModel", new { id = model.ModelId }, model);
         }
+
 
         // DELETE: api/Models/5
         [HttpDelete("{id}")]
