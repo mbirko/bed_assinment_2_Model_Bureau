@@ -1,4 +1,5 @@
-﻿using model_handin.Models;
+﻿using model_handin.Controllers;
+using model_handin.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace model_handin.DTO
@@ -24,5 +25,8 @@ namespace model_handin.DTO
         public List<ModelDtoNames> Models { get; set; }
     }
 
-  
+  public class JobDTONoModels : JobDTO
+    {
+        public List<Expense> Expenses { get; set; }
+    }
 }

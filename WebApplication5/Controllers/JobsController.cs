@@ -28,20 +28,14 @@ namespace model_handin.Controllers
 
         // GET: api/Jobs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InternalJobDTOWithModels>>> GetJobs()
+        public async Task<ActionResult<IEnumerable<Job>>> GetJobs()
         {
-            var jobs = await _context.Jobs.ToListAsync();
-            foreach (var j in jobs)
-            {
-                j.Models = _context.Models.Where(x => x.Jobs.Contains(j)).ToList();
-            }
-            var adaptedJobs = jobs.Adapt<List<InternalJobDTOWithModels>>();
-            return adaptedJobs;
+            return await _context.Jobs.ToListAsync();
         }
 
         // GET: api/Jobs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Job>> GetJob(long id)
+        public async Task<ActionResult<JobDTONoModels>> GetJob(long id)
         {
             var job = await _context.Jobs.FindAsync(id);
 
@@ -49,8 +43,12 @@ namespace model_handin.Controllers
             {
                 return NotFound();
             }
+            var expenses = _context.Expenses.Where(x => x.JobId == id).ToList();
 
-            return job;
+            job.Expenses = expenses;
+
+            var jobdotnomodel = job.Adapt<JobDTONoModels>();
+            return jobdotnomodel;
         }
 
         // PUT: api/Jobs/appendModel/5
@@ -71,7 +69,7 @@ namespace model_handin.Controllers
             }
 
             job.Models!.Add(model);
-
+            
             _context.Entry(job).State = EntityState.Modified;
 
             try
@@ -143,20 +141,6 @@ namespace model_handin.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        // GET: api/Jobs/model/5
-        [HttpGet("model/{modelId}")]
-        public async Task<ActionResult<List<JobDTO>>> GetJobsForModel(long modelId)
-        {
-            var model = await _context.Models.FindAsync(modelId);
-            if (model == null)
-            {
-                return NotFound();
-            }
-            var jobs = _context.Jobs.Where(x => x.Models.Contains(model)).ToList();
-            var adaptedJobs = jobs.Adapt<List<JobDTO>>();
-            return adaptedJobs;
         }
 
         private bool JobExists(long id)
