@@ -31,4 +31,10 @@ namespace model_handin.DTO
         [MaxLength(1000)]
         public string? Comments { get; set; }
     }
+
+    public class ModelDtoNames
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
 }

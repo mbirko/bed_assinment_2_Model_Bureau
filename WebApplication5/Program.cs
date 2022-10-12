@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSignalR();
-if (!builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ModelDb>(options => options.UseInMemoryDatabase("modeldb"));
 }

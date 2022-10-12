@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +28,15 @@ namespace model_handin.Controllers
 
         // GET: api/Jobs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Job>>> GetJobs()
+        public async Task<ActionResult<IEnumerable<InternalJobDTOWithModels>>> GetJobs()
         {
-            return await _context.Jobs.ToListAsync();
+            var jobs = await _context.Jobs.ToListAsync();
+            foreach (var j in jobs)
+            {
+                j.Models = _context.Models.Where(x => x.Jobs.Contains(j)).ToList();
+            }
+            var adaptedJobs = jobs.Adapt<List<InternalJobDTOWithModels>>();
+            return adaptedJobs;
         }
 
         // GET: api/Jobs/5
@@ -64,7 +71,7 @@ namespace model_handin.Controllers
             }
 
             job.Models!.Add(model);
-            
+
             _context.Entry(job).State = EntityState.Modified;
 
             try
@@ -136,6 +143,20 @@ namespace model_handin.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        // GET: api/Jobs/model/5
+        [HttpGet("model/{modelId}")]
+        public async Task<ActionResult<List<JobDTO>>> GetJobsForModel(long modelId)
+        {
+            var model = await _context.Models.FindAsync(modelId);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            var jobs = _context.Jobs.Where(x => x.Models.Contains(model)).ToList();
+            var adaptedJobs = jobs.Adapt<List<JobDTO>>();
+            return adaptedJobs;
         }
 
         private bool JobExists(long id)

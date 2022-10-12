@@ -13,4 +13,16 @@ namespace model_handin.DTO
         [MaxLength(2000)]
         public string? Comments { get; set; }
     }
+
+    public class InternalJobDTOWithModels : JobDTO
+    {
+        public InternalJobDTOWithModels()
+        {
+            Models = new List<ModelDtoNames>();  
+        }
+        public long JobId { get; set; }
+        public List<ModelDtoNames> Models { get; set; }
+    }
+
+  
 }
