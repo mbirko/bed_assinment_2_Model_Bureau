@@ -10,7 +10,7 @@ namespace model_handin.Services
     public class JobService : IJobService
     {
 
-        private readonly ModelDb _dbContext;
+        private readonly ModelDb _context;
 
         //public List<JobDTO> ConvertToDtO(List<Job> jobs)
         //{
@@ -18,9 +18,9 @@ namespace model_handin.Services
         //    return modelsDto;
         //}
         //private DbContext _context;
-        public JobService(ModelDb _context)
+        public JobService(ModelDb context)
         {
-            _dbContext = _context;
+            _context = context;
             //_context = _context;
         }
         public Job ConvertToJob(JobDTO jobDTO)

@@ -4,6 +4,11 @@ namespace model_handin.Models
 {
     public class Job
     {
+        public Job()
+        {
+            Models = new List<Model>();
+            Expenses = new List<Expense>();
+        }
         public long JobId { get; set; }
         [MaxLength(64)]
         public string? Customer { get; set; }

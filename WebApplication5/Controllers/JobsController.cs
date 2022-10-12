@@ -46,6 +46,38 @@ namespace model_handin.Controllers
             return job;
         }
 
+        // PUT: api/Jobs/appendModel/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("appendModel/{jobId}/{modelId}")]
+        public async Task<IActionResult> PutAppendModelJob(long jobId, long modelId)
+        {
+            var model = _context.Models.FirstOrDefault(x => x.ModelId == modelId);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            var job = _context.Jobs.FirstOrDefault(x => x.JobId == jobId);
+            if (job == null)
+            {
+                return NotFound();
+            }
+
+            job.Models!.Add(model);
+            
+            _context.Entry(job).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
         // PUT: api/Jobs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
