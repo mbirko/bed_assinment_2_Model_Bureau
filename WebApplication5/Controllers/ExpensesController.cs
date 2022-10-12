@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using model_handin.Data;
+using model_handin.Hubs;
 using model_handin.Models;
 
 namespace model_handin.Controllers
@@ -15,10 +17,11 @@ namespace model_handin.Controllers
     public class ExpensesController : ControllerBase
     {
         private readonly ModelDb _context;
-
-        public ExpensesController(ModelDb context)
+        private readonly IHubContext<ExpenseNotification, IExpenseNotification> _expenseNotificationContext;
+        public ExpensesController(ModelDb context, IHubContext<ExpenseNotification, IExpenseNotification> expenseNotificationContext )
         {
             _context = context;
+            _expenseNotificationContext = expenseNotificationContext;
         }
 
         // GET: api/Expenses
@@ -80,7 +83,7 @@ namespace model_handin.Controllers
         {
             _context.Expenses.Add(expense);
             await _context.SaveChangesAsync();
-
+            await _expenseNotificationContext.Clients.All.Notification($"New Expense added. Amount: {expense.amount}, Date: {expense.Date}");
             return CreatedAtAction("GetExpense", new { id = expense.ExpenseId }, expense);
         }
 
