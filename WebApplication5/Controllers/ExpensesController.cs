@@ -26,7 +26,7 @@ namespace model_handin.Controllers
 
         // GET: api/Expenses
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
+        private async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
         {
             return await _context.Expenses.ToListAsync();
         }
@@ -48,7 +48,7 @@ namespace model_handin.Controllers
         // PUT: api/Expenses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense(long id, Expense expense)
+        private async Task<IActionResult> PutExpense(long id, Expense expense)
         {
             if (id != expense.ExpenseId)
             {
@@ -81,15 +81,29 @@ namespace model_handin.Controllers
         [HttpPost]
         public async Task<ActionResult<Expense>> PostExpense(Expense expense)
         {
+            var model = _context.Models.FirstOrDefault(x => x.ModelId == expense.ModelId);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            var job = _context.Jobs.FirstOrDefault(x => x.JobId == expense.JobId);
+            if (job == null)
+            {
+                return NotFound();
+            }
             _context.Expenses.Add(expense);
             await _context.SaveChangesAsync();
             await _expenseNotificationContext.Clients.All.Notification($"New Expense added. Amount: {expense.amount}, Date: {expense.Date}");
+            // this demands that the GetExpense endpoint is public, 
+            // becuase of this dependensy, we cannot hide it from
+            // the user of the api 
             return CreatedAtAction("GetExpense", new { id = expense.ExpenseId }, expense);
         }
 
         // DELETE: api/Expenses/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExpense(long id)
+        private async Task<IActionResult> DeleteExpense(long id)
         {
             var expense = await _context.Expenses.FindAsync(id);
             if (expense == null)
