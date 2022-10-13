@@ -21,6 +21,9 @@ namespace model_handin.Services
         public JobService(ModelDb context)
         {
             _context = context;
+            TypeAdapterConfig<ModelDTO, Model>
+                .NewConfig()
+                .IgnoreNullValues(true);
             //_context = _context;
         }
         public Job ConvertToJob(JobDTO jobDTO)
