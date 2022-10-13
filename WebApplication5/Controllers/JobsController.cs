@@ -78,6 +78,39 @@ namespace model_handin.Controllers
 
             return NoContent();
         }
+        // PUT: api/Jobs/removeModel/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("removeModel/{jobId}/{modelId}")]
+        public async Task<IActionResult> PutRemoveModelJob(long jobId, long modelId)
+        {
+            var job = _context.Jobs.FirstOrDefault(x => x.JobId == jobId);
+            if (job == null)
+            {
+                return NotFound();
+            }
+            // if the model is within the jobs list, 
+            var model = _context.Models.FirstOrDefault(x => x.ModelId == modelId);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            
+            job.Models!.Remove(model);
+            
+            _context.Entry(job).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
+        
         // PUT: api/Jobs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
