@@ -85,7 +85,7 @@ namespace model_handin.Controllers
         }
         // PUT: api/Jobs/removeModel/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("removeModel/{jobId}/{modelId}")]
+        [HttpDelete("removeModel/{jobId}/{modelId}")]
         public async Task<IActionResult> PutRemoveModelJob(long jobId, long modelId)
         {
             var job = _context.Jobs.FirstOrDefault(x => x.JobId == jobId);
