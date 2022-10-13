@@ -7,7 +7,8 @@ namespace model_handin.Interfaces
     {
         JobDTO ConvertToDTOJob(Job job);
         Job ConvertToJob(JobDTO jobDTO);
-        
+        Job UpdateJob(Job destination, jobDtoPutUpdate source);
+
         //Model ConvertToModel(ModelDTO model);
 
         //List<ModelDTO> ConvertToDtO(List<Model> model);

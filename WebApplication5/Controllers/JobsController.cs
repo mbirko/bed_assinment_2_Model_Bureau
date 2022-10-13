@@ -119,14 +119,15 @@ namespace model_handin.Controllers
         // PUT: api/Jobs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutJob(long id, JobDTO jobDTO)
+        public async Task<IActionResult> PutJob(long id, jobDtoPutUpdate jobDTO)
         {
-            if (id != jobDTO.JobId)
+            var job = _context.Jobs.FirstOrDefault(x => x.JobId == id);
+            if (job == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-
-            var job = _jobService.ConvertToJob(jobDTO);
+            
+            job = _jobService.UpdateJob(job, jobDTO);
             _context.Entry(job).State = EntityState.Modified;
 
             try

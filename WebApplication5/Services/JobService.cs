@@ -34,6 +34,10 @@ namespace model_handin.Services
             return jobdto;
         }
 
+        public Job UpdateJob(Job destination, jobDtoPutUpdate source)
+        {
+            return source.Adapt(destination);
+        }
         //public Job CreateJob(Job job)
         //{
         //    var models = _context.Model.Where(x=>x.ModelId == job.model)

@@ -25,8 +25,20 @@ namespace model_handin.DTO
         public List<ModelDtoNames> Models { get; set; }
     }
 
-  public class JobDTONoModels : JobDTO
+    public class JobDTONoModels : JobDTO
     {
         public List<Expense> Expenses { get; set; }
     }
+
+    public class jobDtoPutUpdate
+    {
+        public DateTimeOffset StartDate { get; set; }
+        public int Days { get; set; }
+        [MaxLength(128)]
+        public string? Location { get; set; }
+        [MaxLength(2000)]
+        public string? Comments { get; set; }
+    } 
+  
+  
 }
