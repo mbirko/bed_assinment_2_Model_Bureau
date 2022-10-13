@@ -28,6 +28,11 @@ namespace model_handin.Services
             var job = jobDTO.Adapt<Job>();
             return job;
         }
+        public JobDTO ConvertToDTOJob(Job job)
+        {
+            var jobdto = job.Adapt<JobDTO>();
+            return jobdto;
+        }
 
         //public Job CreateJob(Job job)
         //{

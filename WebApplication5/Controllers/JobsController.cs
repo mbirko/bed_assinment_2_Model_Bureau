@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,7 @@ namespace model_handin.Controllers
 
         // GET: api/Jobs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Job>> GetJob(long id)
+        public async Task<ActionResult<JobDTONoModels>> GetJob(long id)
         {
             var job = await _context.Jobs.FindAsync(id);
 
@@ -42,8 +43,12 @@ namespace model_handin.Controllers
             {
                 return NotFound();
             }
+            var expenses = _context.Expenses.Where(x => x.JobId == id).ToList();
 
-            return job;
+            job.Expenses = expenses;
+
+            var jobdotnomodel = job.Adapt<JobDTONoModels>();
+            return jobdotnomodel;
         }
 
         // PUT: api/Jobs/appendModel/5

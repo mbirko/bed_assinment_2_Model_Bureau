@@ -5,6 +5,7 @@ namespace model_handin.Interfaces
 {
     public interface IJobService
     {
+        JobDTO ConvertToDTOJob(Job job);
         Job ConvertToJob(JobDTO jobDTO);
         
         //Model ConvertToModel(ModelDTO model);

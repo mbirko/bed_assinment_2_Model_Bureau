@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using model_handin.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace model_handin.DTO
@@ -30,5 +31,18 @@ namespace model_handin.DTO
         public string? HairColor { get; set; }
         [MaxLength(1000)]
         public string? Comments { get; set; }
+    }
+
+    public class ModelIdDTO : ModelDTO
+    {
+        public List<JobDTO> Jobs { get; set; }
+        public List<Expense> Expenses { get; set; }
+        
+    }
+
+    public class ModelDtoNames
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
