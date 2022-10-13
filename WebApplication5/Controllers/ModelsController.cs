@@ -75,14 +75,14 @@ namespace model_handin.Controllers
         // PUT: api/Models/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModel(long id, ModelDTO modelDto)
+        public async Task<IActionResult> PutModel(long id, ModelPutDto Dto)
         {
-            if (id != modelDto.ModelId)
+            var model = _context.Models.FirstOrDefault(x => x.ModelId == id);
+            if (model == null)
             {
                 return BadRequest();
             }
-
-            var model = _modelService.ConvertToModel(modelDto);
+            model = _modelService.UpdateModel(model, Dto);
             _context.Entry(model).State = EntityState.Modified;
 
             try
@@ -116,8 +116,7 @@ namespace model_handin.Controllers
 
             return CreatedAtAction("GetModel", new { id = model.ModelId }, model);
         }
-
-
+        
         // DELETE: api/Models/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteModel(long id)
