@@ -53,7 +53,7 @@ namespace model_handin.Controllers
 
         // PUT: api/Jobs/appendModel/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("appendModel/{jobId}/{modelId}")]
+        [HttpPut("{jobId}/{modelId}")]
         public async Task<IActionResult> PutAppendModelJob(long jobId, long modelId)
         {
             var model = _context.Models.FirstOrDefault(x => x.ModelId == modelId);
@@ -78,14 +78,14 @@ namespace model_handin.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                return BadRequest();
+                return StatusCode(500, "Im am not doing my job properly, im sorry. We are database noops");
             }
 
             return NoContent();
         }
         // PUT: api/Jobs/removeModel/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpDelete("removeModel/{jobId}/{modelId}")]
+        [HttpDelete("{jobId}/{modelId}")]
         public async Task<IActionResult> PutRemoveModelJob(long jobId, long modelId)
         {
             var job = _context.Jobs.FirstOrDefault(x => x.JobId == jobId);
